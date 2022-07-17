@@ -1,4 +1,6 @@
+from math import prod
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 
 app = FastAPI()
@@ -23,3 +25,15 @@ def double(num: int) -> dict:
 @app.get('/rect_area')
 def rect_area(width: int, height: int = 1) -> dict:
     return {'result': f'The rectangle area is {height * width}. '}
+
+
+class Product(BaseModel):
+    name: str
+    price: float
+
+
+@app.post('/products')
+def products(product: Product):
+    return {'message': f'Product {product.name} sucessfully added. Price is ${product.price}.',
+            'Params': {'product': product.name,
+                       'price': product.price}}
