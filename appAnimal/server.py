@@ -22,6 +22,14 @@ def list_animals():
     return data_base
 
 
+@app.get('/animals/{animal_id}')
+def get_animal(animal_id: int) -> dict:
+    for animal in data_base:
+        if animal_id == animal.id:
+            return animal
+    return {'msg': 'Animal not found.'}
+
+
 @app.post('/add_animal')
 def add_animal(animal: Animal) -> dict:
     if data_base:
@@ -30,3 +38,12 @@ def add_animal(animal: Animal) -> dict:
         animal.id = 1
     data_base.append(animal)
     return 'Success!'
+
+
+@app.delete('/animals/{animal_id}')
+def remove_animal(animal_id: int) -> dict:
+    for index, animal in enumerate(data_base):
+        if animal_id == animal.id:
+            return {'msg': 'Animal removed.',
+                    'animal_removed': data_base.pop(index)}
+    return {'msg': 'Animal not found.'}
